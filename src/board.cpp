@@ -1,52 +1,116 @@
 #include "board.h"
-
 #include <iostream>
 
 using namespace std;
 
-char playerToChar(Player p) {
-    switch (p) {
-        case NONE: return ' ';
-        case X: return 'X';
-        case O: return 'O';
+char playerToChar(Player p)
+{
+    switch (p)
+    {
+    case NONE:
+        return ' ';
+    case X:
+        return 'X';
+    case O:
+        return 'O';
     }
 }
 
 TicTacToeBoard::TicTacToeBoard()
 {
-    // TODO
+    for (int i = 0; i < SPACES; i++)
+    {
+        board[i] = NONE;
+    }
 }
 
 void TicTacToeBoard::print() const
 {
-    // TODO
+    cout << " -------------" << endl;
+    for (int i = 0; i < SPACES; i++)
+    {
+        cout << " | " << playerToChar(board[i]);
+        if ((i + 1) % COLUMNS == 0)
+        {
+            cout << " |" << endl;
+            cout << " -------------" << endl;
+        }
+    }
 }
 
 bool TicTacToeBoard::isValidMove(int move) const
 {
-    // TODO
-    return false;
+    return move >= 1 && move <= SPACES && board[move - 1] == NONE;
 }
 
 void TicTacToeBoard::move(Player player, int move)
 {
-    // TODO
+    if (!isValidMove(move))
+    {
+        throw InvalidMove();
+    }
+
+    if (player == NONE)
+    {
+        throw InvalidPlayer();
+    }
+
+    board[move - 1] = player;
 }
 
 bool TicTacToeBoard::isGameOver() const
 {
-    // TODO
-    return false;
+    return hasPlayerWon(X) || hasPlayerWon(O) || isTie();
 }
 
 bool TicTacToeBoard::isTie() const
 {
-    // TODO
-    return false;
+    if (hasPlayerWon(X) || hasPlayerWon(O))
+    {
+        return false;
+    }
+
+    for (int i = 0; i < SPACES; i++)
+    {
+        if (board[i] == NONE)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool TicTacToeBoard::hasPlayerWon(Player player) const
 {
-    // TODO
-    return false;
+    if (player == NONE)
+    {
+        throw InvalidPlayer();
+    }
+
+    for (int i = 0; i < SPACES; i += ROWS)
+    {
+        if (board[i] == player &&
+            board[i] == board[i + 1] &&
+            board[i] == board[i + 2])
+        {
+            return true;
+        }
+    }
+
+    for (int i = 0; i < COLUMNS; i++)
+    {
+        if (board[i] == player && board[i] == board[i + 3] && board[i] == board[i + 6])
+        {
+            return true;
+        }
+
+        if ((board[0] == player && board[0] == board[4] && board[0] == board[8]) ||
+            (board[2] == player && board[2] == board[4] && board[2] == board[6]))
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
