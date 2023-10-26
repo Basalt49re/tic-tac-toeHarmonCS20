@@ -2,14 +2,19 @@
 
 #include <array>
 
-enum Player { NONE, X, O };
+enum Player
+{
+    NONE,
+    X,
+    O
+};
 
 char playerToChar(Player p);
 
-class TicTacToeBoard {
+class TicTacToeBoard
+{
 
 public:
-
     static const int SPACES = 9;
 
     TicTacToeBoard();
@@ -26,8 +31,13 @@ public:
 
     bool hasPlayerWon(Player player) const;
 
-    class InvalidMove {};
-    class InvalidPlayer {};
+    class InvalidMove
+    {
+    };
+    class InvalidPlayer
+    {
+    };
+
 private:
     static const int ROWS = 3;
     static const int COLUMNS = 3;
